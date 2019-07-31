@@ -266,6 +266,7 @@ namespace bx
 	}
 
 	//---
+	/*
 	template<typename Ty, typename FromT> struct IsAssignableT     : public BoolConstantT<__is_assignable(Ty, FromT)> {};
 	template<typename Ty>                 struct IsCopyAssignableT : public IsAssignableT<AddLvalueReferenceType<Ty>, AddRvalueReferenceType<const Ty>> {};
 	template<typename Ty>                 struct IsMoveAssignableT : public IsAssignableT<AddLvalueReferenceType<Ty>, AddRvalueReferenceType<Ty>> {};
@@ -287,6 +288,7 @@ namespace bx
 	{
 		return IsMoveAssignableT<Ty>::value;
 	}
+	*/
 
 	//---
 	template<typename Ty, typename FromT> struct IsTriviallyAssignableT     : public BoolConstantT<__is_trivially_assignable(Ty, FromT)>                                  {};
@@ -312,6 +314,7 @@ namespace bx
 	}
 
 	//---
+	/*
 	template<typename Ty, typename... ArgsT> struct IsConstructibleT     : public BoolConstantT<__is_constructible(Ty, ArgsT...)>  {};
 	template<typename Ty>                    struct IsCopyConstructibleT : public IsConstructibleT<Ty, AddLvalueReferenceType<Ty>> {};
 	template<typename Ty>                    struct IsMoveConstructibleT : public IsConstructibleT<Ty, AddRvalueReferenceType<Ty>> {};
@@ -333,6 +336,7 @@ namespace bx
 	{
 		return IsMoveConstructibleT<Ty>::value;
 	}
+	*/
 
 	//---
 	template<typename Ty, typename... ArgsT> struct IsTriviallyConstructibleT     : public BoolConstantT<__is_trivially_constructible(Ty, ArgsT...)> {};
