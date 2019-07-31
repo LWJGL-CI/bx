@@ -769,9 +769,9 @@ function toolchain(_buildDir, _libDir)
 		}
 
 	configuration { "linux-arm-gcc" }
-		targetdir (path.join(_buildDir, "linux32_arm_gcc/bin"))
-		objdir (path.join(_buildDir, "linux32_arm_gcc/obj"))
-		libdirs { path.join(_libDir, "lib/linux32_arm_gcc") }
+		targetdir (path.join(_buildDir, "linux_arm_gcc/bin"))
+		objdir (path.join(_buildDir, "linux_arm_gcc/obj"))
+		libdirs { path.join(_libDir, "lib/linux_arm_gcc") }
 		buildoptions {
 			"-Wunused-value",
 			"-Wundef",
