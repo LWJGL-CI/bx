@@ -76,16 +76,16 @@ namespace bx
 	constexpr bool isPod();
 
 	/// Returns true if type `FromT` can be assigned to type `Ty`, otherwise returns false.
-	template<typename Ty, typename FromT>
-	constexpr bool isAssignable();
+	//template<typename Ty, typename FromT>
+	//constexpr bool isAssignable();
 
 	/// Returns true if type `Ty` has copy assignment operator, otherwise returns false.
-	template<typename Ty, typename Uy>
-	constexpr bool isCopyAssignable();
+	//template<typename Ty, typename Uy>
+	//constexpr bool isCopyAssignable();
 
 	/// Returns true if type `Ty` has move assignment operator, otherwise returns false.
-	template<typename Ty, typename Uy>
-	constexpr bool isMoveAssignable();
+	//template<typename Ty, typename Uy>
+	//constexpr bool isMoveAssignable();
 
 	/// Returns true if type `FromT` can be trivially assigned to type `Ty`, otherwise returns false.
 	template<typename Ty, typename FromT>
@@ -101,8 +101,8 @@ namespace bx
 
 	/// Returns true if type `Ty` is constructible when the specified argument types are used,
 	/// otherwise returns false.
-	template<typename Ty, typename... ArgsT>
-	constexpr bool isConstructible();
+	//template<typename Ty, typename... ArgsT>
+	//constexpr bool isConstructible();
 
 	/// Returns true if type `Ty` has copy constructor, otherwise returns false.
 	template<typename Ty>

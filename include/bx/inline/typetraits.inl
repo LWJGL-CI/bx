@@ -221,29 +221,29 @@ namespace bx
 			;
 	}
 
-	template<typename Ty, typename FromT>
+	/*template<typename Ty, typename FromT>
 	inline constexpr bool isAssignable()
 	{
 		return __is_assignable(Ty, FromT);
-	}
+	}*/
 
-	template<typename Ty>
+	/*template<typename Ty>
 	inline constexpr bool isCopyAssignable()
 	{
 		return isAssignable<
 				  AddLvalueReferenceType<Ty>
 				, AddLvalueReferenceType<const Ty>
 				>();
-	}
+	}*/
 
-	template<typename Ty>
+	/*template<typename Ty>
 	inline constexpr bool isMoveAssignable()
 	{
 		return isAssignable<
 				  AddLvalueReferenceType<Ty>
 				, AddRvalueReferenceType<Ty>
 				>();
-	}
+	}*/
 
 	template<typename Ty, typename FromT>
 	inline constexpr bool isTriviallyAssignable()
@@ -269,23 +269,23 @@ namespace bx
 				>();
 	}
 
-	template<typename Ty, typename... ArgsT>
+	/*template<typename Ty, typename... ArgsT>
 	inline constexpr bool isConstructible()
 	{
 		return __is_constructible(Ty, ArgsT...);
-	}
+	}*/
 
-	template<typename Ty>
+	/*template<typename Ty>
 	inline constexpr bool isCopyConstructible()
 	{
 		return isConstructible<Ty, AddLvalueReferenceType<Ty>>();
-	}
+	}*/
 
-	template<typename Ty>
+	/*template<typename Ty>
 	inline constexpr bool isMoveConstructible()
 	{
 		return isConstructible<Ty, AddRvalueReferenceType<Ty>>();
-	}
+	}*/
 
 	template<typename Ty, typename... ArgsT>
 	inline constexpr bool isTriviallyConstructible()
