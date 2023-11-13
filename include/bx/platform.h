@@ -193,6 +193,13 @@
 #elif  defined(__linux__)
 #	undef  BX_PLATFORM_LINUX
 #	define BX_PLATFORM_LINUX 1
+#elif  defined(__FreeBSD__)        \
+	|| defined(__FreeBSD_kernel__) \
+	|| defined(__NetBSD__)         \
+	|| defined(__OpenBSD__)        \
+	|| defined(__DragonFly__)
+#	undef  BX_PLATFORM_BSD
+#	define BX_PLATFORM_BSD 1
 #elif  defined(__ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__) \
 	|| defined(__ENVIRONMENT_TV_OS_VERSION_MIN_REQUIRED__)
 #	undef  BX_PLATFORM_IOS
@@ -213,13 +220,6 @@
 #elif defined(__PROSPERO__)
 #	undef  BX_PLATFORM_PS5
 #	define BX_PLATFORM_PS5 1
-#elif  defined(__FreeBSD__)        \
-	|| defined(__FreeBSD_kernel__) \
-	|| defined(__NetBSD__)         \
-	|| defined(__OpenBSD__)        \
-	|| defined(__DragonFly__)
-#	undef  BX_PLATFORM_BSD
-#	define BX_PLATFORM_BSD 1
 #elif defined(__GNU__)
 #	undef  BX_PLATFORM_HURD
 #	define BX_PLATFORM_HURD 1
@@ -484,8 +484,7 @@ static_assert(false, "\n\n"
 	"\t\n");
 #endif // BX_CPU_ENDIAN_BIG
 
-#if BX_PLATFORM_BSD   \
- || BX_PLATFORM_HAIKU \
+#if BX_PLATFORM_HAIKU \
  || BX_PLATFORM_HURD
 static_assert(false, "\n\n"
 	"\t** IMPORTANT! **\n\n"
