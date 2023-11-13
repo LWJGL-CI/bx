@@ -36,6 +36,7 @@
 #	if BX_PLATFORM_ANDROID
 #		include <malloc.h> // mallinfo
 #	elif   BX_PLATFORM_LINUX \
+        || BX_PLATFORM_BSD \
 		|| BX_PLATFORM_RPI
 #		include <stdio.h>  // fopen
 #		include <sys/mman.h>
@@ -45,6 +46,10 @@
 #		include <sys/mman.h>
 #	endif // BX_PLATFORM_ANDROID
 #endif // BX_PLATFORM_
+
+#if BX_PLATFORM_BSD
+#   include <pthread.h> // pthread_self
+#endif
 
 namespace bx
 {
@@ -87,6 +92,8 @@ namespace bx
 #elif  BX_PLATFORM_IOS \
 	|| BX_PLATFORM_OSX
 		return (mach_port_t)::pthread_mach_thread_np(pthread_self() );
+#elif BX_PLATFORM_BSD
+		return *(uint32_t*)::pthread_self();
 #else
 		BX_ASSERT(false, "Function '%s' is not implemented!", BX_FUNCTION);
 		return 0;
@@ -98,7 +105,7 @@ namespace bx
 #if BX_PLATFORM_ANDROID
 		struct mallinfo mi = mallinfo();
 		return mi.uordblks;
-#elif  BX_PLATFORM_LINUX
+#elif  BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 		FILE* file = fopen("/proc/self/statm", "r");
 		if (NULL == file)
 		{
@@ -303,7 +310,7 @@ namespace bx
 
 	void* exec(const char* const* _argv)
 	{
-#if BX_PLATFORM_LINUX
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 		pid_t pid = fork();
 
 		if (0 == pid)
@@ -379,7 +386,7 @@ namespace bx
 	{
 		BX_ERROR_SCOPE(_err);
 
-#if BX_PLATFORM_LINUX || BX_PLATFORM_OSX
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD || BX_PLATFORM_OSX
 		constexpr int32_t flags = 0
 			| MAP_ANON
 			| MAP_PRIVATE
@@ -414,7 +421,7 @@ namespace bx
 	{
 		BX_ERROR_SCOPE(_err);
 
-#if BX_PLATFORM_LINUX || BX_PLATFORM_OSX
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD || BX_PLATFORM_OSX
 		int32_t result = munmap(_address, _size);
 
 		if (-1 == result)
@@ -443,7 +450,7 @@ namespace bx
 	size_t memoryPageSize()
 	{
 		size_t pageSize;
-#if BX_PLATFORM_LINUX || BX_PLATFORM_OSX
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD || BX_PLATFORM_OSX
 		pageSize = sysconf(_SC_PAGESIZE);
 #elif BX_PLATFORM_WINDOWS
 		SYSTEM_INFO si;
