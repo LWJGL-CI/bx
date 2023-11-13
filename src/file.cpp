@@ -82,6 +82,9 @@ namespace bx
 #	elif BX_PLATFORM_PS4
 #		define fseeko64 fseek
 #		define ftello64 ftell
+#	elif BX_PLATFORM_BSD
+#		define fseeko64 fseeko
+#		define ftello64 ftello
 #	endif // BX_
 
 	class FileReaderImpl : public FileReaderI

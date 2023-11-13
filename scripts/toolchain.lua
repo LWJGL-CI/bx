@@ -49,6 +49,7 @@ local function androidToolchainRoot()
 		local hostTags = {
 			windows = "windows-x86_64",
 			linux   = "linux-x86_64",
+			bsd = "bsd-x86_64",
 			macosx  = "darwin-x86_64"
 		}
 		android.toolchainRoot = "$(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/" .. hostTags[os.get()]
@@ -70,6 +71,7 @@ function toolchain(_buildDir, _libDir)
 			{ "android-x86_64",  "Android - x86_64"           },
 			{ "wasm2js",         "Emscripten/Wasm2JS"         },
 			{ "wasm",            "Emscripten/Wasm"            },
+			{ "freebsd",         "FreeBSD"                    },
 			{ "linux-gcc",       "Linux (GCC compiler)"       },
 			{ "linux-gcc-afl",   "Linux (GCC + AFL fuzzer)"   },
 			{ "linux-clang",     "Linux (Clang compiler)"     },
@@ -273,6 +275,9 @@ function toolchain(_buildDir, _libDir)
 			premake.gcc.llvm = true
 			premake.gcc.namestyle = "Emscripten"
 			location (path.join(_buildDir, "projects", _ACTION .. "-" .. _OPTIONS["gcc"]))
+
+        elseif "freebsd" == _OPTIONS["gcc"] then
+			location (path.join(_buildDir, "projects", _ACTION .. "-freebsd"))
 
 		elseif "ios-arm64" == _OPTIONS["gcc"] then
 			premake.gcc.cc  = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang"
@@ -934,6 +939,14 @@ function toolchain(_buildDir, _libDir)
 		targetdir (path.join(_buildDir, "wasm/bin"))
 		objdir (path.join(_buildDir, "wasm/obj"))
 		libdirs { path.join(_libDir, "lib/wasm") }
+
+    configuration { "freebsd" }
+		targetdir (path.join(_buildDir, "freebsd/bin"))
+		objdir (path.join(_buildDir, "freebsd/obj"))
+		libdirs { path.join(_libDir, "lib/freebsd") }
+		includedirs {
+			path.join(bxDir, "include/compat/freebsd"),
+		}
 
 	configuration { "durango" }
 		targetdir (path.join(_buildDir, "durango/bin"))

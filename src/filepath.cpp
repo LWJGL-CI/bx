@@ -205,7 +205,8 @@ namespace bx
 		bool result = len != 0 && len < *_inOutSize;
 		*_inOutSize = len;
 		return result;
-#elif BX_PLATFORM_LINUX
+#elif BX_PLATFORM_LINUX \
+   || BX_PLATFORM_BSD
 		char tmp[64];
 		snprintf(tmp, sizeof(tmp), "/proc/%d/exe", getpid() );
 		ssize_t result = readlink(tmp, _out, *_inOutSize);
