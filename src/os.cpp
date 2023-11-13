@@ -35,6 +35,7 @@
 #	if BX_PLATFORM_ANDROID
 #		include <malloc.h> // mallinfo
 #	elif   BX_PLATFORM_LINUX \
+        || BX_PLATFORM_BSD \
 		|| BX_PLATFORM_RPI
 #		include <stdio.h>  // fopen
 #		include <sys/mman.h>
@@ -44,6 +45,10 @@
 #		include <sys/mman.h>
 #	endif // BX_PLATFORM_ANDROID
 #endif // BX_PLATFORM_
+
+#if BX_PLATFORM_BSD
+#   include <pthread.h> // pthread_self
+#endif
 
 namespace bx
 {
@@ -86,6 +91,8 @@ namespace bx
 #elif  BX_PLATFORM_IOS \
 	|| BX_PLATFORM_OSX
 		return (mach_port_t)::pthread_mach_thread_np(pthread_self() );
+#elif BX_PLATFORM_BSD
+		return *(uint32_t*)::pthread_self();
 #else
 		BX_ASSERT(false, "Function '%s' is not implemented!", BX_FUNCTION);
 		return 0;
@@ -97,7 +104,7 @@ namespace bx
 #if BX_PLATFORM_ANDROID
 		struct mallinfo mi = mallinfo();
 		return mi.uordblks;
-#elif  BX_PLATFORM_LINUX
+#elif  BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 		FILE* file = fopen("/proc/self/statm", "r");
 		if (NULL == file)
 		{
@@ -302,7 +309,7 @@ namespace bx
 
 	void* exec(const char* const* _argv)
 	{
-#if BX_PLATFORM_LINUX
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD
 		pid_t pid = fork();
 
 		if (0 == pid)
@@ -378,7 +385,7 @@ namespace bx
 
 	namespace
 	{
-#if BX_PLATFORM_LINUX || BX_PLATFORM_OSX
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD || BX_PLATFORM_OSX
 		static int32_t toPosixProt(uint32_t _protect)
 		{
 			switch (_protect)
@@ -431,7 +438,7 @@ namespace bx
 		BX_ASSERT(_alignment <= pageSize, "Alignments greater than the page size are not implemented (requested %zu, page %zu).", _alignment, pageSize);
 		BX_UNUSED(_alignment, pageSize);
 
-#if BX_PLATFORM_LINUX || BX_PLATFORM_OSX
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD || BX_PLATFORM_OSX
 		if (NULL == _address)
 		{
 			if (0 == (state & Memory::Reserve) )
@@ -606,7 +613,7 @@ namespace bx
 	{
 		BX_ERROR_SCOPE(_err);
 
-#if BX_PLATFORM_LINUX || BX_PLATFORM_OSX
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD || BX_PLATFORM_OSX
 		int32_t result = munmap(_address, _size);
 
 		if (-1 == result)
@@ -637,7 +644,7 @@ namespace bx
 	{
 		const uint32_t page = _flags & Memory::PageMask;
 
-#if BX_PLATFORM_LINUX || BX_PLATFORM_OSX
+#if BX_PLATFORM_LINUX || BX_PLATFORM_BSD || BX_PLATFORM_OSX
 		if (0 != (page & Memory::PageHuge) )
 		{
 			return 1ull << 30; // 1 GiB nominal
