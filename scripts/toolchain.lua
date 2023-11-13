@@ -49,6 +49,7 @@ local function androidToolchainRoot()
 		local hostTags = {
 			windows = "windows-x86_64",
 			linux   = "linux-x86_64",
+			bsd = "bsd-x86_64",
 			macosx  = "darwin-x86_64"
 		}
 		android.toolchainRoot = "$(ANDROID_NDK_ROOT)/toolchains/llvm/prebuilt/" .. hostTags[os.get()]
