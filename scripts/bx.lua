@@ -54,7 +54,7 @@ project "bx"
 
 	defines (userdefines())
 
-	configuration { "linux-*" }
+	configuration { "linux-* or freebsd" }
 		buildoptions {
 			"-fPIC",
 		}
